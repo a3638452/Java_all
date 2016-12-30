@@ -12,8 +12,11 @@ public class DaoFactoryUtil {
 		Object obj = null;
 		try {
 			obj = Class.forName(clz.getName()).newInstance();
-		} catch (InstantiationException | IllegalAccessException
-				| ClassNotFoundException e) {
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		return obj;
