@@ -123,6 +123,19 @@ public class DateUtils {
 	}
 	
 	/**
+	 * 获取昨天的日期（yyyyMMdd）
+	 * @return 昨天的日期
+	 */
+	public static String getYesterdayDate2() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());  
+		cal.add(Calendar.DAY_OF_YEAR, -1);  
+		
+		Date date = cal.getTime();
+		
+		return DATEKEY_FORMAT.format(date);
+	}
+	/**
 	 * 格式化日期（yyyy-MM-dd）
 	 * @param date Date对象
 	 * @return 格式化后的日期
