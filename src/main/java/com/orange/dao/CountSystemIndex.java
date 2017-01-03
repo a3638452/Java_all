@@ -1,5 +1,11 @@
 package com.orange.dao;
 
+/*
+ * 功能：统计系统指标，用户在不同“e学”版本、设备类型、网络类型、操作系统版本、设备分辨率中的分布
+ * 时间：2016.12.29
+ * 作者：大数据部门-任乐乐
+ */
+
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -24,7 +30,7 @@ public class CountSystemIndex {
 			+ "group by substring_index(s_device_type,',',-1),substring_index(s_device_type,',',1)");
 
 		
-		appVersion.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL), "sys_app_version",PropertiesUtil.get_jdbconnect());
+		appVersion.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "sys_app_version",PropertiesUtil.getProperties());
 	}
 	
 	public void get_sys_devicetype(SparkSession session) {
@@ -38,7 +44,7 @@ public class CountSystemIndex {
 			+ "and s_device_type <> 'null' "
 			+ "and s_device_type is not null "		
 			+ "group by substring_index(substring_index(s_device_type,',',3),',',-1)");
-		deviceType.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL), "sys_device_type",PropertiesUtil.get_jdbconnect());
+		deviceType.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "sys_device_type",PropertiesUtil.getProperties());
 	}
 
 	public void get_sys_networktype(SparkSession session) {
@@ -51,7 +57,7 @@ public class CountSystemIndex {
 				+ "where devicenetwork <> '' "
 				+ "and devicenetwork <> 'null' "
 				+ "group by devicenetwork");
-		network.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL),"sys_network_type",PropertiesUtil.get_jdbconnect());
+		network.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2),"sys_network_type",PropertiesUtil.getProperties());
 	}
 
 	public void get_sys_osversion(SparkSession session) {
@@ -65,7 +71,7 @@ public class CountSystemIndex {
 				+ "and s_device_type <> 'null' "
 				+ "and s_device_type is not null "				
 				+ "group by substring_index(s_device_type,',',2)");
-		osVersion.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL), "sys_os_version",PropertiesUtil.get_jdbconnect());
+		osVersion.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "sys_os_version",PropertiesUtil.getProperties());
 	}	
 	
 	public void get_sys_screentype(SparkSession session) {
@@ -78,7 +84,7 @@ public class CountSystemIndex {
 			+ "where devicescreen <> '' "
 			+ "and devicescreen <> 'null' "
 			+ "group by devicescreen");
-		screen.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL),"sys_screen_type",PropertiesUtil.get_jdbconnect());		
+		screen.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2),"sys_screen_type",PropertiesUtil.getProperties());		
 	}
 	
 

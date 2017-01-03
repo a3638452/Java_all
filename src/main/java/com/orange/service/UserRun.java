@@ -10,11 +10,11 @@ import com.orange.common.util.SessionOfSpark;
 import com.orange.dao.CountUserIndex;
 
 
-public class Run {
+public class UserRun {
 	public static void main(String[] args) {
 		SparkSession session = SessionOfSpark.getSparkSQLSession("DBReportSystem","use sdkdata");
 		new CountUserIndex().get_count_devicetype(session);//获取设备机型分布
-		/*new CountUserIndex().get_count_devicescreen(session);//获取设备分辨率
+		new CountUserIndex().get_count_devicescreen(session);//获取设备分辨率
 		new CountUserIndex().get_count_area(session);//获取用户的分布区域
 		new CountUserIndex().get_dau(session);//统计app的日活跃用户数
 		new CountUserIndex().get_sevendau(session);//统计app的7天/周活跃用户数
@@ -24,6 +24,6 @@ public class Run {
 		new CountUserIndex().get_count_stay_time(session);//统计用户停留时长
 		new CountUserIndex().get_count_stay_time(session);//统计用户使用频率
 		new CountUserIndex().get_count_AdClickTimeSection(session);//统计广告日点击情况
-*/		session.stop();
+		session.stop();
 	}
 }

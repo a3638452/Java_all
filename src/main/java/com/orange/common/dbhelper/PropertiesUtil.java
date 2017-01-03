@@ -12,14 +12,14 @@ import com.orange.common.util.Constants;
  */
 public class PropertiesUtil {
 
-	public static Properties get_jdbconnect(){
-		Properties prop = new Properties();
-		prop.put("user",Constants.JDBC_USER);
-		prop.put("password",Constants.JDBC_PASSWORD);
-		return prop;
-	}
-	
-	
+//	public static Properties get_jdbconnect(){
+//		Properties prop = new Properties();
+//		prop.put("user",Constants.JDBC_USER);
+//		prop.put("password",Constants.JDBC_PASSWORD);
+//		return prop;
+//	}
+//	
+//	
 	public static Properties getProperties(){
 		Properties defProps = new Properties();
 		try {

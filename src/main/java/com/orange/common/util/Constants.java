@@ -29,5 +29,10 @@ public interface Constants {
 	String JDBC_USER_PROD = "jdbc.user.prod";
 	String JDBC_PASSWORD_PROD = "jdbc.password.prod";
 	
+	String JDBC_URL2 = "url";
+	String JDBC_USER2 = "user";
+	String JDBC_PASSWORD2 = "password";
+	
+	
 	
 }

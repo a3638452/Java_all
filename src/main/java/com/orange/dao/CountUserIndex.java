@@ -1,5 +1,11 @@
 package com.orange.dao;
 
+/*
+ * 功能：统计用户指标：用户点击广告的时间、用户的地理区域分布、用户的日活跃、分辨率分布、设备类型分布、七天（周）活跃、用户停留时长、三十天（月）活跃
+ * 时间：2016.12.29
+ * 作者：大数据部门-任乐乐
+ */
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,7 +32,7 @@ public class CountUserIndex {
 				+ "and logintime>from_unixtime(unix_timestamp()-86400,'yyyy-MM-dd 00:00:00') "
 				+ "and logintime<from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
 				+ "group by substring_index(logintime,':',2)");
-			sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL), "report_ad_click_time",PropertiesUtil.get_jdbconnect());
+			sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_ad_click_time",PropertiesUtil.getProperties());
 			Dataset<Row> sqlDF2 = session.sql("select "
 				+ "\"线上学堂广告位\" as ad_name,"
 				+ "substring_index(substring_index(logintime,':',2),' ',-1) as click_time_section,"
@@ -40,7 +46,7 @@ public class CountUserIndex {
 				+ "and logintime<from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
 				+ "group by substring_index(logintime,':',2)"
 				);
-			sqlDF2.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL), "report_ad_click_time",PropertiesUtil.get_jdbconnect());
+			sqlDF2.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_ad_click_time",PropertiesUtil.getProperties());
 	}
 	
 	public void get_count_area (SparkSession session){
@@ -61,7 +67,7 @@ public class CountUserIndex {
 				+ "and city is not null "
 				+ "and area is not null "				
 				+ "group by province,city,area");
-		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL), "sys_user_area",PropertiesUtil.get_jdbconnect());
+		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "sys_user_area",PropertiesUtil.getProperties());
 	}
 	
 	public void get_dau (SparkSession session){	
@@ -88,8 +94,8 @@ public class CountUserIndex {
 			+ "and logintime>from_unixtime(unix_timestamp()-86400,'yyyy-MM-dd 00:00:00') "
 			+ "and logintime<from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
 			+ "group by province,city,area");
-		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL), "report_au",PropertiesUtil.get_jdbconnect());
-		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL), "report_daysau",PropertiesUtil.get_jdbconnect());
+		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_au",PropertiesUtil.getProperties());
+		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_daysau",PropertiesUtil.getProperties());
 	}
 	
 	public void get_count_devicescreen(SparkSession session) {
@@ -100,7 +106,7 @@ public class CountUserIndex {
 			+ "from logindata "
 			+ "where devicescreen <> '' "
 			+ "group by devicescreen");
-		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL), "sys_screen",PropertiesUtil.get_jdbconnect());
+		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "sys_screen",PropertiesUtil.getProperties());
 	}
 
 	public void get_count_devicetype(SparkSession session) {		
@@ -114,7 +120,7 @@ public class CountUserIndex {
 				+ "where devicetype <> '' "
 				+ "and devicetype is not null "	
 				+ "group by substring_index(devicetype,' ',1),substring_index(substring_index(devicetype,' ',4),' ',-2) ");
-		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL), "sys_devicetype",PropertiesUtil.get_jdbconnect());
+		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "sys_devicetype",PropertiesUtil.getProperties());
 	}
 
 	public void get_hau (SparkSession session){	
@@ -127,7 +133,7 @@ public class CountUserIndex {
 			+ "where logintime>from_unixtime(unix_timestamp()-86400,'yyyy-MM-dd 00:00:00') "
 			+ "and logintime<from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
 			+ "group by substring_index(substring_index(logintime,':',1),' ',-1) ");
-		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL), "report_hau",PropertiesUtil.get_jdbconnect());
+		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_hau",PropertiesUtil.getProperties());
 	}
 
 	public void get_count_modules_hau (SparkSession session){
@@ -144,7 +150,7 @@ public class CountUserIndex {
 			+ "where logintime>from_unixtime(unix_timestamp()-86400,'yyyy-MM-dd 00:00:00') "
 			+ "and logintime<from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
 			+ "group by substring_index(substring_index(logintime,':',1),' ',-1),modulename");
-		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL), "sys_modules_hau",PropertiesUtil.get_jdbconnect());
+		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "sys_modules_hau",PropertiesUtil.getProperties());
 	}
 
 	public void get_sevendau (SparkSession session){
@@ -171,7 +177,7 @@ public class CountUserIndex {
 			+ "and logintime>from_unixtime(unix_timestamp()-86400*7,'yyyy-MM-dd 00:00:00') "
 			+ "and logintime<from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
 			+ "group by province,city,area");
-		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL), "report_daysau",PropertiesUtil.get_jdbconnect());
+		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_daysau",PropertiesUtil.getProperties());
 	
 		Calendar ca = Calendar.getInstance();
 		ca.setTime(new Date());
@@ -200,7 +206,7 @@ public class CountUserIndex {
 				+ "and logintime>from_unixtime(unix_timestamp()-86400*7,'yyyy-MM-dd 00:00:00') "
 				+ "and logintime<from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
 				+ "group by province,city,area");
-			sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL), "report_au",PropertiesUtil.get_jdbconnect());
+			sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_au",PropertiesUtil.getProperties());
 		}
 	}
 
@@ -221,7 +227,7 @@ public class CountUserIndex {
 			+"logintime<from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
 			+"group by userid) "
 			+"group by staytime");
-		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL), "report_user_stay_time",PropertiesUtil.get_jdbconnect());
+		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_user_stay_time",PropertiesUtil.getProperties());
 	}
 
 	public void get_thirtydau (SparkSession session){
@@ -249,7 +255,7 @@ public class CountUserIndex {
 			+ "and logintime < from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
 			+ "group by province,city,area");
 
-		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL), "report_daysau",PropertiesUtil.get_jdbconnect());
+		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_daysau",PropertiesUtil.getProperties());
 
 		SimpleDateFormat getdate = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat getmonth = new SimpleDateFormat("yyyy-MM");
@@ -284,7 +290,7 @@ public class CountUserIndex {
 				+ beforedate + " 00:00:00' "
 				+ "and logintime < from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
 				+ "group by province,city,area");
-			sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL), "report_au",PropertiesUtil.get_jdbconnect());
+			sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_au",PropertiesUtil.getProperties());
 		}
 	}
 	

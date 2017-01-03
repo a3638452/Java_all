@@ -10,6 +10,7 @@ public class SessionOfSpark {
 	public static SparkSession getSparkSQLSession(String appName,String dataTarg){
 		SparkSession spark = SparkSession
 			  .builder()
+			  .master("local")
 			  .appName(appName)
 			  .config(Constants.SPARK_SQL_DIR, Constants.WAREHOURSE_DIR)
 			  .enableHiveSupport()
