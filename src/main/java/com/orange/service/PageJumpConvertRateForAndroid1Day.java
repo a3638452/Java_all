@@ -1,37 +1,41 @@
 	package com.orange.service;
 	
 	import java.util.ArrayList;
-	import java.util.Comparator;
-	import java.util.Iterator;
-	import java.util.List;
-	import java.util.Map;
-	import java.util.Map.Entry;
-	import java.util.TreeMap;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 	
+
 	import org.apache.spark.api.java.JavaPairRDD;
-	import org.apache.spark.api.java.JavaRDD;
-	import org.apache.spark.api.java.function.Function;
-	import org.apache.spark.api.java.function.Function2;
-	import org.apache.spark.api.java.function.PairFlatMapFunction;
-	import org.apache.spark.api.java.function.PairFunction;
-	import org.apache.spark.sql.Dataset;
-	import org.apache.spark.sql.Row;
-	import org.apache.spark.sql.RowFactory;
-	import org.apache.spark.sql.SparkSession;
-	import org.apache.spark.sql.types.DataTypes;
-	import org.apache.spark.sql.types.StructField;
-	import org.apache.spark.sql.types.StructType;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.Function2;
+import org.apache.spark.api.java.function.PairFlatMapFunction;
+import org.apache.spark.api.java.function.PairFunction;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.RowFactory;
+import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
 	
+
 	import scala.Tuple2;
 	
+
 	import com.orange.bean.PageSplitConvertRate;
-	import com.orange.common.util.Constants;
-	import com.orange.common.util.DateUtils;
-	import com.orange.common.util.NumberUtils;
-	import com.orange.dao.AndroidPageSplitConvertRateDAO;
-	import com.orange.dao.factory.DAOFactory;
-	import com.orange.dao.impl.AndroidPageSplitConvertRateDAOImpl1Day;
-	import com.orange.dao.impl.AndroidPageSplitConvertRateDAOImpl7Day;
+import com.orange.common.util.Constants;
+import com.orange.common.util.DateUtils;
+import com.orange.common.util.NumberUtils;
+import com.orange.common.util.SparkSessionForHdfs;
+import com.orange.dao.AndroidPageSplitConvertRateDAO;
+import com.orange.dao.factory.DAOFactory;
+import com.orange.dao.impl.AndroidPageSplitConvertRateDAOImpl1Day;
+import com.orange.dao.impl.AndroidPageSplitConvertRateDAOImpl7Day;
 	
 	
 	
@@ -40,7 +44,7 @@
 	
 	public  void PageJumpConvertRateForAndroid1Day() {
 		//1.构建sparksession
-		 SparkSession spark = getSparkSession();
+		SparkSession spark = new SparkSessionForHdfs().getSparkSession();
 	    //2.获取任务参数
 		  JavaRDD<Row> actionRDD = generateRDD(spark);
 		  //3.获取<userid，pageFlow>的格式
@@ -72,21 +76,7 @@
 		  spark.stop();
 	}
 	
-	/**
-	 * 配置spark作业环境
-	 * @return
-	 */
-	private  SparkSession getSparkSession() {
-		String warehouseLocation = "/code/VersionTest/spark-warehouse";
-	    SparkSession spark = SparkSession
-	      .builder()
-	      .appName("PageJumpConvertRateForAndroid")
-	      .master(Constants.SPARK_LOCAL)
-	      .config("spark.sql.warehouse.dir", warehouseLocation)
-	      //.enableHiveSupport()
-	      .getOrCreate();
-		return spark;
-	}
+
 	
 	/**
 	 * 获取数据，创建收个RDD<Row>
@@ -94,7 +84,7 @@
 	 * @return
 	 */
 	private  JavaRDD<Row> generateRDD(SparkSession spark) {
-		 JavaRDD<String> pageRDD = spark.sparkContext().textFile("hdfs://master:9000/SDKData/android/data_android_" + DateUtils.getYesterdayDate2() + "/pagedata_android" + DateUtils.getYesterdayDate2() + ".txt", 1).toJavaRDD();
+		 JavaRDD<String> pageRDD = spark.sparkContext().textFile(Constants.HDFS_URL_ANDROID_1D, 1).toJavaRDD();
 		    
 		    String schemaString = "userid pagename functionname logintime logouttime";
 	
