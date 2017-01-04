@@ -10,10 +10,20 @@ public interface Constants {
 	/**
 	 * Spark作业相关的常量
 	 */
-	String SPARK_LOCAL = "local";
+	String SPARK_LOCAL = "spark.local";
 	String SPARK_PAGE_RATE = "PageConvertRate";
 	String SPARK_SQL_DIR= "spark.sql.warehouse.dir";
 	String WAREHOURSE_DIR = "file:${system:user.dir}/spark-warehouse";	
+	String WAREOURSELOCATION = "/code/VersionTest/spark-warehouse";
+	
+	String HDFS_URL_ANDROID_1D = "hdfs://master:9000/SDKData/android/data_android_" + DateUtils.getYesterdayDate2() + "/pagedata_android" + DateUtils.getYesterdayDate2() + ".txt";
+	String HDFS_URL_ANDROID_7D = "hdfs://master:9000/user/hadoop/bingbing/android/pagedata7day.txt";
+	String HDFS_URL_ANDROID_14D = "hdfs://master:9000/user/hadoop/bingbing/android/pagedata14day.txt";
+	String HDFS_URL_ANDROID_30D = "hdfs://master:9000/user/hadoop/bingbing/android/pagedata30day.txt";
+	String HDFS_URL_IOS_1D = "hdfs://master:9000/SDKData/ios/data_ios_" + DateUtils.getYesterdayDate2() + "/pagedata_ios" + DateUtils.getYesterdayDate2() +".txt";
+	String HDFS_URL_IOS_7D = "hdfs://master:9000/user/hadoop/bingbing/ios/pagedata7day.txt";
+	String HDFS_URL_IOS_14D = "hdfs://master:9000/user/hadoop/bingbing/ios/pagedata14day.txt";
+	String HDFS_URL_IOS_30D = "hdfs://master:9000/user/hadoop/bingbing/ios/pagedata30day.txt";
 	
 	
 	/**
