@@ -249,6 +249,28 @@ public class CountUserIndex {
 			+"group by staytime");
 		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_user_stay_time",PropertiesUtil.getProperties());
 	}
+	
+	//获取用户使用频率，并写入表report_use_frequency
+	public void get_use_frequency (SparkSession session){
+				Dataset<Row> sqlDF = session.sql("select " 
+						+"usefrequency as use_frequency,"
+						+"count(userid) as user_number,"
+						+"from_unixtime(unix_timestamp()-86400,'yyyy-MM-dd') as report_date,"
+						+"from_unixtime(unix_timestamp()) as create_time "
+						+"from "
+						+"(select "
+						+"userid,"
+						+"count(*) as usefrequency "
+						+"from logindata "
+						+"where "
+						+"logintime>from_unixtime(unix_timestamp()-86400,'yyyy-MM-dd 00:00:00') "
+						+"and "
+						+"logintime<from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
+						+"group by userid) "
+						+"group by usefrequency");
+				sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_use_frequency",PropertiesUtil.getProperties());
+	}
+	
 
 	//获取用户30天活跃，并写入表report_daysau
 	public void get_thirtydau (SparkSession session){

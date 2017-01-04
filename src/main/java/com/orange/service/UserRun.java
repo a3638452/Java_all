@@ -22,7 +22,7 @@ public class UserRun {
 		new CountUserIndex().get_hau(session);//统计app的分时用户活跃情况
 		new CountUserIndex().get_count_modules_hau(session);//统计模块日活跃情况
 		new CountUserIndex().get_count_stay_time(session);//统计用户停留时长
-		new CountUserIndex().get_count_stay_time(session);//统计用户使用频率
+		new CountUserIndex().get_use_frequency(session);//统计用户使用频率
 		new CountUserIndex().get_count_AdClickTimeSection(session);//统计广告日点击情况
 		session.stop();
 	}
