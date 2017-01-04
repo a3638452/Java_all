@@ -269,7 +269,7 @@ public class CountUserIndex {
 						+"group by userid) "
 						+"group by usefrequency");
 				sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_use_frequency",PropertiesUtil.getProperties());
-	}
+	} 
 	
 
 	//获取用户30天活跃，并写入表report_daysau
