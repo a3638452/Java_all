@@ -25,5 +25,5 @@ public class UserRun {
 		new CountUserIndex().get_use_frequency(session);//统计用户使用频率 
 		new CountUserIndex().get_count_AdClickTimeSection(session);//统计广告日点击情况
 		session.stop();
-	}
+	} 
 }
