@@ -134,7 +134,7 @@ public class CountUserIndex {
 		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "sys_devicetype",PropertiesUtil.getProperties());
 	}
 
-	//获取用户停留时长，并写入表report_hau
+	//获取用户分时活跃，并写入表report_hau
 	public void get_hau (SparkSession session){	
 		//将sql语句的查询结果存储在一个Dataset中，进而通过jdbc导出到mysql数据库中
 		Dataset<Row> sqlDF = session.sql("select "
