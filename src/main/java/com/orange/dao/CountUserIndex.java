@@ -168,32 +168,32 @@ public class CountUserIndex {
 		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "sys_modules_hau",PropertiesUtil.getProperties());
 	}
 
-	//获取三十天活跃，并写入表report_daysau
+	//获取7天活跃，并写入表report_daysau;获取周活跃，并写入表report_au
 	public void get_sevendau (SparkSession session){
 		//将sql语句的查询结果存储在一个Dataset中，进而通过jdbc导出到mysql数据库中
 		Dataset<Row> sqlDF = session.sql("select "
-			+ "province,"
-			+ "city,"
-			+ "area,"
-			+ "count(distinct userid) as active_user_number,"
-			+ "count(userid) as login_number,"
-			+ "concat(from_unixtime(unix_timestamp()-86400*7,'yyyy-MM-dd~'),"
-			+ "from_unixtime(unix_timestamp()-86400,'yyyy-MM-dd')) active_date,"
-			+ "\"SevenDAU\" as count_type,"
-			+ "from_unixtime(unix_timestamp()) create_time "
-			+ "from logindata "
-			+ "where province <> '' "
-			+ "and city <> '' "
-			+ "and area <> '' "
-			+ "and province <> 'null' "
-			+ "and city <> 'null' "
-			+ "and area <> 'null' "
-			+ "and province is not null "
-			+ "and city is not null "
-			+ "and area is not null "		
-			+ "and logintime>from_unixtime(unix_timestamp()-86400*7,'yyyy-MM-dd 00:00:00') "
-			+ "and logintime<from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
-			+ "group by province,city,area");
+				+ "province,"
+				+ "city,"
+				+ "area,"
+				+ "count(distinct userid) as active_user_number,"
+				+ "count(userid) as login_number,"
+				+ "concat(from_unixtime(unix_timestamp()-86400*7,'yyyy-MM-dd~'),"
+				+ "from_unixtime(unix_timestamp()-86400,'yyyy-MM-dd')) active_date,"
+				+ "\"SevenDAU\" as count_type,"
+				+ "from_unixtime(unix_timestamp()) create_time "
+				+ "from logindata "
+				+ "where province <> '' "
+				+ "and city <> '' "
+				+ "and area <> '' "
+				+ "and province <> 'null' "
+				+ "and city <> 'null' "
+				+ "and area <> 'null' "
+				+ "and province is not null "
+				+ "and city is not null "
+				+ "and area is not null "		
+				+ "and logintime > from_unixtime(unix_timestamp()-86400*30,'yyyy-MM-dd 00:00:00') "
+				+ "and logintime < from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
+				+ "group by province,city,area");
 		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_daysau",PropertiesUtil.getProperties());
 	
 		//获取周活跃，并写入表report_au
@@ -201,7 +201,7 @@ public class CountUserIndex {
 		ca.setTime(new Date());
 		int week = ca.get(Calendar.DAY_OF_WEEK);
 		if(week == 2){
-			sqlDF = session.sql("select "
+			Dataset<Row> sqlDF2 = session.sql("select "
 				+ "province,"
 				+ "city,"
 				+ "area,"
@@ -224,7 +224,7 @@ public class CountUserIndex {
 				+ "and logintime>from_unixtime(unix_timestamp()-86400*7,'yyyy-MM-dd 00:00:00') "
 				+ "and logintime<from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
 				+ "group by province,city,area");
-			sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_au",PropertiesUtil.getProperties());
+			sqlDF2.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_au",PropertiesUtil.getProperties());
 		}
 	}
 
@@ -272,7 +272,7 @@ public class CountUserIndex {
 	}  
 	
 
-	//获取用户30天活跃，并写入表report_daysau
+	//获取用户30天活跃，并写入表report_daysau;统计月活，并将结果写入report_au表
 	public void get_thirtydau (SparkSession session){
 		//将sql语句的查询结果存储在一个Dataset中，进而通过jdbc导出到mysql数据库中
 		Dataset<Row> sqlDF = session.sql("select "
@@ -312,7 +312,7 @@ public class CountUserIndex {
 			Date beforemonth = ca.getTime();
 			String beforedate = getdate.format(beforemonth);
 			String beforemonthdate = getmonth.format(beforemonth);		
-			sqlDF = session.sql("select "
+			Dataset<Row> sqlDF2 = session.sql("select "
 				+ "province,"
 				+ "city,"
 				+ "area,"
@@ -331,11 +331,11 @@ public class CountUserIndex {
 				+ "and province is not null "
 				+ "and city is not null "
 				+ "and area is not null "
-				+ "logintime > '"
+				+ "and logintime > '"
 				+ beforedate + " 00:00:00' "
 				+ "and logintime < from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
 				+ "group by province,city,area");
-			sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_au",PropertiesUtil.getProperties());
+			sqlDF2.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_au",PropertiesUtil.getProperties());
 		}
 	}
 	
