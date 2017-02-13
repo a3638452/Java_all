@@ -21,7 +21,7 @@ public class CountSystemIndex {
 	public void get_sys_appversion(SparkSession session) {
 		//将sql语句的查询结果存储在一个Dataset中，进而通过jdbc导出到mysql数据库中
 		Dataset<Row> appVersion = session.sql("select " 
-			+ "substring_index(s_device_type,' ',1) os_type,"
+			+ "substring_index(s_device_type,',',1) os_type,"
 			+ "substring_index(s_device_type,',',-1) app_version," 
 			+ "count(distinct s_user_name) as user_number,"
 			+ "from_unixtime(unix_timestamp()) create_time " 
@@ -32,7 +32,7 @@ public class CountSystemIndex {
 			+ "group by substring_index(s_device_type,',',-1),substring_index(s_device_type,',',1)");
 
 		
-		appVersion.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "sys_app_version",PropertiesUtil.getProperties());
+		appVersion.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "system_app_version",PropertiesUtil.getProperties());
 	}
 	
 	//统计系统指标：用户在不同设备型号中的分布
@@ -47,7 +47,7 @@ public class CountSystemIndex {
 			+ "and s_device_type <> 'null' "
 			+ "and s_device_type is not null "		
 			+ "group by substring_index(substring_index(s_device_type,',',3),',',-1)");
-		deviceType.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "sys_device_type",PropertiesUtil.getProperties());
+		deviceType.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "system_device_type",PropertiesUtil.getProperties());
 	}
 
 	//统计系统指标：用户在不同网络类型中的分布
@@ -61,7 +61,7 @@ public class CountSystemIndex {
 				+ "where devicenetwork <> '' "
 				+ "and devicenetwork <> 'null' "
 				+ "group by devicenetwork");
-		network.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2),"sys_network_type",PropertiesUtil.getProperties());
+		network.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2),"system_network_type",PropertiesUtil.getProperties());
 	}
 
 	//统计系统指标：用户在不同操作系统版本中的分布
@@ -76,7 +76,7 @@ public class CountSystemIndex {
 				+ "and s_device_type <> 'null' "
 				+ "and s_device_type is not null "				
 				+ "group by substring_index(s_device_type,',',2)");
-		osVersion.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "sys_os_version",PropertiesUtil.getProperties());
+		osVersion.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "system_os_version",PropertiesUtil.getProperties());
 	}	
 	
 	//统计系统指标：用户在不同设备分辨率中的分布
@@ -90,7 +90,7 @@ public class CountSystemIndex {
 			+ "where devicescreen <> '' "
 			+ "and devicescreen <> 'null' "
 			+ "group by devicescreen");
-		screen.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2),"sys_screen_type",PropertiesUtil.getProperties());		
+		screen.write().mode("Overwrite").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2),"system_screen_type",PropertiesUtil.getProperties());		
 	}
 	
 
