@@ -11,13 +11,17 @@ import com.orange.dao.CountSystemIndex;
 
 
 public class SysRun {
-	public static void main(String[] args) {		
+	public static void main(String[] args) {	
+		
 		SparkSession session = SessionOfSpark.getSparkSQLSession("DBReportSystem","use sdkdata");
-//		new CountSystemIndex().get_sys_appversion(session);//统计系统指标：用户在不同版本“e学”中的分布,数据源为exiaoxin
-//		new CountSystemIndex().get_sys_devicetype(session);//统计系统指标：用户在不同设备型号中的分布,数据源为exiaoxin
-//		new CountSystemIndex().get_sys_screentype(session);//统计系统指标：用户在不同设备分辨率中的分布,数据源为exiaoxin
+		new CountSystemIndex().get_sys_screentype(session);//统计系统指标：用户在不同设备分辨率中的分布,数据源为sdkdata
 		new CountSystemIndex().get_sys_networktype(session);//统计系统指标：用户在不同网络类型中的分布,数据源为sdkdata
-		new CountSystemIndex().get_sys_osversion(session);//统计系统指标：用户在不同操作系统版本中的分布,数据源为sdkdata
-		session.stop();
+
+		session.sql("use exiaoxin");
+		new CountSystemIndex().get_sys_appversion(session);//统计系统指标：用户在不同版本“e学”中的分布,数据源为exiaoxin
+		new CountSystemIndex().get_sys_devicetype(session);//统计系统指标：用户在不同设备型号中的分布,数据源为exiaoxin
+		new CountSystemIndex().get_sys_osversion(session);//统计系统指标：用户在不同操作系统版本中的分布,数据源为exiaoxin
+		session.stop();	
+		
 	}
 }
