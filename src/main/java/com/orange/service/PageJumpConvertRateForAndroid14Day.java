@@ -37,12 +37,11 @@ import com.orange.dao.AndroidPageSplitConvertRateDAO;
 import com.orange.dao.factory.DAOFactory;
 import com.orange.dao.impl.AndroidPageSplitConvertRateDAOImpl14Day;
 import com.orange.dao.impl.AndroidPageSplitConvertRateDAOImpl7Day;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 	
 	
 	
 	@SuppressWarnings("all")
-	public class PageJumpConvertRateForAndroid14Day implements Serializable {
+	public class PageJumpConvertRateForAndroid14Day {
 	
 	public  void PageJumpConvertRateForAndroid14Day() {
 		//1.构建sparksession

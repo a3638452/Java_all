@@ -18,6 +18,8 @@ import com.orange.common.dbhelper.ConfigurationManager;
 import com.orange.common.dbhelper.PropertiesUtil;
 import com.orange.common.util.Constants;
 
+
+
 public class CountUserIndex {
 	
 	//统计广告的分时点击情况，并将结果写入report_ad_click_time表

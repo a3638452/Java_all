@@ -10,6 +10,7 @@ import com.orange.dao.impl.IosPageSplitConvertRateDAOImpl14Day;
 import com.orange.dao.impl.IosPageSplitConvertRateDAOImpl1Day;
 import com.orange.dao.impl.IosPageSplitConvertRateDAOImpl30Day;
 import com.orange.dao.impl.IosPageSplitConvertRateDAOImpl7Day;
+import com.orange.dao.impl.realTimeDAOImpl;
 
 
 
@@ -82,6 +83,13 @@ public class DAOFactory {
 		return (IosPageSplitConvertRateDAOImpl30Day) new DaoFactoryUtil().getDaoFactory(IosPageSplitConvertRateDAOImpl30Day.class);
 	}
 	
+	/**
+	 * 实时longindata数据持久化到mysql
+	 */
+	public static realTimeDAOImpl getRealTimeLoginData(){
+		return new realTimeDAOImpl();
+		
+	}
 	
 	}
 	
