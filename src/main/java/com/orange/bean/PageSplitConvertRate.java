@@ -1,23 +1,21 @@
 package com.orange.bean;
 
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.io.Serializable;
 
 /**
  * 页面切片转化率
  * @author Administrator
  *
  */
-public class PageSplitConvertRate {
+public class PageSplitConvertRate implements Serializable {
 
 	private Long id;
 	private String page_split;
 	private String start_convert_rate;
 	private String last_convert_rate;
 	private String pv;
-	private long ave_durations;
+	private Long ave_durations;
 	private String create_time;
-	
 	public Long getId() {
 		return id;
 	}
@@ -48,10 +46,10 @@ public class PageSplitConvertRate {
 	public void setPv(String pv) {
 		this.pv = pv;
 	}
-	public long getAve_durations() {
+	public Long getAve_durations() {
 		return ave_durations;
 	}
-	public void setAve_durations(long ave_durations) {
+	public void setAve_durations(Long ave_durations) {
 		this.ave_durations = ave_durations;
 	}
 	public String getCreate_time() {
@@ -60,6 +58,9 @@ public class PageSplitConvertRate {
 	public void setCreate_time(String create_time) {
 		this.create_time = create_time;
 	}
+	
+	
+	
 	
 	
 	

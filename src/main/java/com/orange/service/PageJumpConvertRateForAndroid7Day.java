@@ -1,47 +1,66 @@
 	package com.orange.service;
 	
-	import java.util.ArrayList;
-	import java.util.Arrays;
-	import java.util.Collection;
-	import java.util.Comparator;
-	import java.util.Iterator;
-	import java.util.List;
-	import java.util.Map;
-	import java.util.Map.Entry;
-	import java.util.TreeMap;
+	import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 	
+
+
+
+
+
+
 	import org.apache.spark.api.java.JavaPairRDD;
-	import org.apache.spark.api.java.JavaRDD;
-	import org.apache.spark.api.java.function.Function;
-	import org.apache.spark.api.java.function.Function2;
-	import org.apache.spark.api.java.function.PairFlatMapFunction;
-	import org.apache.spark.api.java.function.PairFunction;
-	import org.apache.spark.sql.Dataset;
-	import org.apache.spark.sql.Row;
-	import org.apache.spark.sql.RowFactory;
-	import org.apache.spark.sql.SparkSession;
-	import org.apache.spark.sql.types.DataTypes;
-	import org.apache.spark.sql.types.StructField;
-	import org.apache.spark.sql.types.StructType;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.Function2;
+import org.apache.spark.api.java.function.PairFlatMapFunction;
+import org.apache.spark.api.java.function.PairFunction;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.RowFactory;
+import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
 	
+
+
+
+
+
+
 	import scala.Tuple2;
 	
+
+
+
+
+
+
 	import com.orange.bean.PageSplitConvertRate;
-	import com.orange.common.util.Constants;
-	import com.orange.common.util.DateUtils;
-	import com.orange.common.util.NumberUtils;
-	import com.orange.common.util.SparkSessionForHdfs;
-	import com.orange.dao.AndroidPageSplitConvertRateDAO;
-	import com.orange.dao.factory.DAOFactory;
-	import com.orange.dao.impl.AndroidPageSplitConvertRateDAOImpl7Day;
-	import com.orange.dao.impl.IosPageSplitConvertRateDAOImpl7Day;
+import com.orange.common.util.Constants;
+import com.orange.common.util.DateUtils;
+import com.orange.common.util.NumberUtils;
+import com.orange.common.util.SparkSessionForHdfs;
+import com.orange.dao.AndroidPageSplitConvertRateDAO;
+import com.orange.dao.factory.DAOFactory;
+import com.orange.dao.impl.AndroidPageSplitConvertRateDAOImpl7Day;
 	
 	
 	
-	@SuppressWarnings("all")
-	public class PageJumpConvertRateForAndroid7Day {
+	public class PageJumpConvertRateForAndroid7Day implements Serializable{
 	
-		public  void PageJumpConvertRateForAndroid7Day() {
+		private static final long serialVersionUID = 1L;
+
+		public  void pageJumpConvertRateForAndroid7Day() {
 			//1.构建sparksession
 			SparkSession spark = new SparkSessionForHdfs().getSparkSession();
 			// 2.获取任务参数
@@ -82,22 +101,6 @@
 	
 		
 		
-		/**
-		 * 求Map<K,V>中Value(值)的最大值
-		 * 
-		 * @param map
-		 * @return
-		 */
-		private  Object getMaxValue(Map<String, Integer> splitPvMAP) {
-			if (splitPvMAP == null)
-				return null;
-			Collection<Integer> c = splitPvMAP.values();
-			Object[] obj = c.toArray();
-			Arrays.sort(obj);
-			return obj[obj.length - 2];
-		}
-	
-	
 	
 		/**
 		 * 获取数据，创建收个RDD<Row>
@@ -126,6 +129,11 @@
 	
 			JavaRDD<Row> rowRDD = pageRDD.map(new Function<String, Row>() {
 	
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
 				@Override
 				public Row call(String row) throws Exception {
 					String[] attributes = row.split(",");
@@ -207,6 +215,11 @@
 				JavaRDD<Row> actionRDD) {
 			return actionRDD.mapToPair(new PairFunction<Row, String, Row>() {
 	
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
 				@Override
 				public Tuple2<String, Row> call(Row row) throws Exception {
 					String userid = row.getString(0);
@@ -229,6 +242,11 @@
 			return sessionid2actionsRDD
 					.flatMapToPair(new PairFlatMapFunction<Tuple2<String, Iterable<Row>>, String, Integer>() {
 	
+						/**
+						 * 
+						 */
+						private static final long serialVersionUID = 1L;
+
 						@Override
 						public Iterator<Tuple2<String, Integer>> call(
 								Tuple2<String, Iterable<Row>> tuple)
@@ -291,6 +309,11 @@
 			return generateAndMatchPageSplit
 					.reduceByKey(new Function2<Integer, Integer, Integer>() {
 	
+						/**
+						 * 
+						 */
+						private static final long serialVersionUID = 1L;
+
 						@Override
 						public Integer call(Integer v1, Integer v2)
 								throws Exception {
@@ -309,6 +332,11 @@
 				JavaPairRDD<String, Integer> splitPV) {
 			return splitPV.values().sortBy(new Function<Integer, Integer>() {
 	
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
 				@Override
 				public Integer call(Integer pv) throws Exception {
 					return pv;
@@ -328,6 +356,11 @@
 			Map<String, Integer> splitPvMap = splitAndPV
 					.reduceByKeyLocally(new Function2<Integer, Integer, Integer>() {
 	
+						/**
+						 * 
+						 */
+						private static final long serialVersionUID = 1L;
+
 						@Override
 						public Integer call(Integer v1, Integer v2)
 								throws Exception {
@@ -363,11 +396,6 @@
 				// System.out.println(splitKey+":"+pvValue);
 	
 			}
-			/*
-			 * System.out.println("!!!###########################");
-			 * System.out.println("firstPage:"+firstPage);
-			 * System.out.println("!!!###########################");
-			 */
 			return convertMap;
 		}
 	
@@ -382,6 +410,11 @@
 			return splitAndPV
 					.flatMapToPair(new PairFlatMapFunction<Tuple2<String, Integer>, String, Integer>() {
 	
+						/**
+						 * 
+						 */
+						private static final long serialVersionUID = 1L;
+
 						@Override
 						public Iterator<Tuple2<String, Integer>> call(
 								Tuple2<String, Integer> tuple) throws Exception {
@@ -407,6 +440,11 @@
 			return getfenmuMap
 					.reduceByKeyLocally(new Function2<Integer, Integer, Integer>() {
 	
+						/**
+						 * 
+						 */
+						private static final long serialVersionUID = 1L;
+
 						@Override
 						public Integer call(Integer v1, Integer v2)
 								throws Exception {
@@ -493,52 +531,24 @@
 					String rate1 = split2[0];
 					String pv = split2[1];
 					String rate2 = split2[2];
-					
-					pageSplitConvertRate2.setPage_split(Split);// 把split值放入实例化的bean里
-					pageSplitConvertRate2.setStart_convert_rate(rate1);// 把pv值放入实例化的bean里
-					pageSplitConvertRate2.setPv(pv);// 把pv值放入实例化的bean里
+				
+					if(Double.valueOf(rate1) <=1 && Double.valueOf(rate2) <= 1){
+						
+					pageSplitConvertRate2.setPage_split(Split);//把split值放入实例化的bean里
+					pageSplitConvertRate2.setStart_convert_rate(rate1);//把pv值放入实例化的bean里
+					pageSplitConvertRate2.setPv(pv);//把pv值放入实例化的bean里
 					pageSplitConvertRate2.setLast_convert_rate(rate2);
-					pageSplitConvertRate2.setCreate_time(DateUtils
-							.formatTimeMinute(new java.util.Date()));
+					pageSplitConvertRate2.setCreate_time(DateUtils.formatTimeMinute(new java.util.Date()));
+					
 	
 					// 执行插入方法
-					AndroidPageSplitConvertRateDAOImpl7Day pageSplitConvertRateDAO = daoFactory
-							.getAndroidPageSplitConvertRateDAO7Day();
-					pageSplitConvertRateDAO.insert(pageSplitConvertRate2);
+					 AndroidPageSplitConvertRateDAO androidPageSplitConvertRateDAO7Day = daoFactory.getAndroidPageSplitConvertRateDAO7Day();
+					androidPageSplitConvertRateDAO7Day.insert(pageSplitConvertRate2);
+				}
 				}
 			}
 	
-			// split+页面绝对转化率+pv
-			/*
-			 * TreeMap<String, String> splitRatePvMap = new
-			 * TreeMap<String,String>();
-			 * 
-			 * for(Entry<String, Double> map1:splitPvRateMap.entrySet()){
-			 * for(Entry<String, Integer> map2:splitPvMAP2.entrySet()){
-			 * if(map1.getKey().equals(map2.getKey())){ String key = map1.getKey();
-			 * String valuePair = map1.getValue() + "," +map2.getValue();
-			 * splitRatePvMap.put(key, valuePair); } } }
-			 * 
-			 * PageSplitConvertRate2 pageSplitConvertRate2 = new
-			 * PageSplitConvertRate2();
-			 * 
-			 * for(Entry<String, String> splitPvMap:splitRatePvMap.entrySet()){
-			 * String Split = splitPvMap.getKey();//从核心算法里获取split String[] page=
-			 * Split.split("——>"); String a = page[0]; String b = page[1];
-			 * if(!a.equals(b)){ String[] split2 = splitPvMap.getValue().split(",");
-			 * String rate = split2[0]; String pv = split2[1];
-			 * 
-			 * 
-			 * pageSplitConvertRate2.setPage_split(Split);//把split值放入实例化的bean里
-			 * pageSplitConvertRate2.setStart_convert_rate(rate);//把pv值放入实例化的bean里
-			 * pageSplitConvertRate2.setPv(pv);//把pv值放入实例化的bean里
-			 * pageSplitConvertRate2.setCreate_time(DateUtils.formatTimeMinute(new
-			 * java.util.Date()));
-			 * 
-			 * //执行插入方法 AndroidPageSplitConvertRateDAO pageSplitConvertRateDAO =
-			 * DAOFactory.getPageSplitConvertRateDAO();
-			 * pageSplitConvertRateDAO.insert(pageSplitConvertRate2); } }
-			 */
+	
 	
 		}
 	

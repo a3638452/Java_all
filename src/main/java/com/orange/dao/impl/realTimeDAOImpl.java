@@ -9,9 +9,8 @@ public class realTimeDAOImpl implements realTimeDAO {
 
 	@Override
 	public void insert(LoginData loginData) {
-		String sql = "insert into realtime_logindata values(?,?,?,?,?,?,?,?,?,?,?,?,?)";  
+		String sql = "insert into realtime_logindata(userid,logintime,devicetype,devicescreen,devicenetwork,province,city,area,streetarea,lng,lat) values(?,?,?,?,?,?,?,?,?,?,?)";  
 		Object[] params = new Object[]{
-				loginData.getId(),
 				loginData.getUserid(),
 				loginData.getLogintime(),
 				loginData.getDevicetype(),
@@ -22,9 +21,7 @@ public class realTimeDAOImpl implements realTimeDAO {
 				loginData.getArea(),
 				loginData.getStreetarea(),
 				loginData.getLng(),
-				loginData.getLat(),
-				loginData.getCreate_time()
-				
+				loginData.getLat()
 		};
 		
 		JDBCHelper jdbcHelper = JDBCHelper.getInstance();

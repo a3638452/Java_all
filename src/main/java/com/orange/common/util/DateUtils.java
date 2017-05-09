@@ -1,6 +1,5 @@
 package com.orange.common.util;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,14 +18,6 @@ public class DateUtils {
 			new SimpleDateFormat("yyyy-MM-dd");
 	public static final SimpleDateFormat DATEKEY_FORMAT = 
 			new SimpleDateFormat("yyyyMMdd");
-	public static final SimpleDateFormat TIMESTAMP_FORMAT = 
-			new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-	
-	
-	public static String parseTimeStamp(Timestamp actionTime1) throws ParseException {
-		return TIME_FORMAT.format(actionTime1);
-		}
-	
 	
 	/**
 	 * 判断一个时间是否在另一个时间之前
@@ -123,10 +114,25 @@ public class DateUtils {
 	}
 	
 	/**
+	 * 获取昨天的时间（yyyy-MM-dd HH:mm:ss）
+	 * @return 昨天的日期
+	 */
+	public static String getYesterdayTime() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());  
+		cal.add(Calendar.DAY_OF_YEAR, -1);  
+		
+		Date date = cal.getTime();
+		
+		return TIME_FORMAT.format(date);
+	}
+	
+	
+	/**
 	 * 获取昨天的日期（yyyyMMdd）
 	 * @return 昨天的日期
 	 */
-	public static String getYesterdayDate2() {
+	public static String getYesterdayDateyyMM() {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());  
 		cal.add(Calendar.DAY_OF_YEAR, -1);  
@@ -135,6 +141,7 @@ public class DateUtils {
 		
 		return DATEKEY_FORMAT.format(date);
 	}
+	
 	/**
 	 * 格式化日期（yyyy-MM-dd）
 	 * @param date Date对象
@@ -155,20 +162,19 @@ public class DateUtils {
 	
 	/**
 	 * 解析时间字符串
-	 * @param actionTime1 时间字符串 
+	 * @param time 时间字符串 
 	 * @return Date
 	 */
-	public static Date parseTime(String actionTime1) {
-		try {
-			return TIME_FORMAT.parse(actionTime1);
+	public static Date parseTime(String time) {
+		try {		
+			if (time != null && !"".equals(time)) {
+				return  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);	
+			}			
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
-	
-	
 	
 	/**
 	 * 格式化日期key
@@ -200,7 +206,7 @@ public class DateUtils {
 	 * @return
 	 */
 	public static String formatTimeMinute(Date date) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");  
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");  
 		return sdf.format(date);
 	}
 	

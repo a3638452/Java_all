@@ -6,6 +6,7 @@ import java.util.Properties;
 /**
  * 配置管理组件
  */
+
 public class ConfigurationManager {
 	
 	// Properties对象使用private来修饰，就代表了其是类私有的

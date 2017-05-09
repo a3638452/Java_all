@@ -8,6 +8,7 @@ package com.orange.common.dbhelper;
  *
  */
 public class DaoFactoryUtil {
+	
 	public Object getDaoFactory(Class<?> clz){
 		Object obj = null;
 		try {

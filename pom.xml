@@ -14,6 +14,19 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+<repositories>
+		<repository>
+			<id>central</id>
+			<name>Maven 2 Repository on ibibio</name>
+			<url>http://repo1.maven.org/maven2</url>
+		</repository>
+		<repository>
+			<id>juziwl</id>
+			<name>Juzi Repository</name>
+			<url>http://192.168.0.248:8081/nexus/content/groups/public</url>
+		</repository>
+	</repositories>
+	
   <dependencies>
 	<!-- spark -->
 	<dependency>
@@ -51,11 +64,7 @@
 	    <artifactId>spark-network-common_2.11</artifactId>
 	    <version>2.0.0</version>
 	</dependency>
-	<dependency>
-	    <groupId>org.apache.spark</groupId>
-	    <artifactId>spark-streaming-kafka_2.11</artifactId>
-	    <version>1.6.2</version>
-	</dependency> 
+
   	<!--spark-sql -->
   	<dependency>
 	    <groupId>org.apache.spark</groupId>
@@ -68,11 +77,7 @@
 	    <artifactId>spark-streaming_2.11</artifactId>
 	    <version>2.0.0</version>
 	</dependency>
-	<dependency>
-	    <groupId>org.apache.spark</groupId>
-	    <artifactId>spark-streaming-kafka_2.11</artifactId>
-	    <version>1.6.2</version>
-	</dependency>
+
 	<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 	<dependency>
 	    <groupId>mysql</groupId>
@@ -92,6 +97,13 @@
     <artifactId>mysql-connector-java</artifactId>
     <version>5.1.38</version>
 </dependency>
+
+<dependency>
+	    <groupId>org.apache.spark</groupId>
+	    <artifactId>spark-streaming-kafka-0-10_2.11</artifactId>
+	    <version>2.0.0</version>
+	</dependency>
+	
 <!--
 <dependency>
         <groupId>org.apache.spark</groupId>
@@ -99,5 +111,19 @@
         <version>2.0.0</version>
 </dependency>
 	-->
+	
   </dependencies>
+  <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

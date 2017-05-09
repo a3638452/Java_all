@@ -3,8 +3,10 @@ package com.orange.bean;
 import java.io.Serializable;
 
 public class LoginData implements Serializable{
-
-	private Long id;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String userid;
 	private String logintime;
 	private String devicetype;
@@ -16,20 +18,6 @@ public class LoginData implements Serializable{
 	private String streetarea;
 	private String lng;
 	private String lat;
-	private String create_time;
-	
-	public String getDevicescreen() {
-		return devicescreen;
-	}
-	public void setDevicescreen(String devicescreen) {
-		this.devicescreen = devicescreen;
-	}
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
 	public String getUserid() {
 		return userid;
 	}
@@ -47,6 +35,12 @@ public class LoginData implements Serializable{
 	}
 	public void setDevicetype(String devicetype) {
 		this.devicetype = devicetype;
+	}
+	public String getDevicescreen() {
+		return devicescreen;
+	}
+	public void setDevicescreen(String devicescreen) {
+		this.devicescreen = devicescreen;
 	}
 	public String getDevicenetwork() {
 		return devicenetwork;
@@ -90,21 +84,7 @@ public class LoginData implements Serializable{
 	public void setLat(String lat) {
 		this.lat = lat;
 	}
-	public String getCreate_time() {
-		return create_time;
-	}
-	public void setCreate_time(String create_time) {
-		this.create_time = create_time;
-	}
-	@Override
-	public String toString() {
-		return "LoginData [id=" + id + ", userid=" + userid + ", logintime="
-				+ logintime + ", devicetype=" + devicetype + ", devicescreen="
-				+ devicescreen + ", devicenetwork=" + devicenetwork
-				+ ", province=" + province + ", city=" + city + ", area="
-				+ area + ", streetarea=" + streetarea + ", lng=" + lng
-				+ ", lat=" + lat + ", create_time=" + create_time + "]";
-	}
+	
 	
 	
 	
