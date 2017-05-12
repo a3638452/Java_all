@@ -19,10 +19,15 @@ public interface Constants {
 	String SPARK_SQL_DIR= "spark.sql.warehouse.dir";
 	String WAREHOURSE_DIR = "file:${system:user.dir}/spark-warehouse";	
 	String WAREOURSELOCATION = "/code/VersionTest/spark-warehouse";
+	String URL_EXIAOXIN = "jdbc:mysql://192.168.0.120:3306/exiaoxin?useUnicode=true&characterEncoding=UTF-8";
 	//报表指标需要用到的hdfs和jdbc连接及表明
 	//String HDFS_PAGEDATA_YESTERDAY = "hdfs://master:9000/SDKData/total/data"+DateUtils.getYesterdayDate()+"/pagedata"+DateUtils.getYesterdayDate()+".txt";
 	String SPARK_REPORT = "报表指标APP";
 	String T_USER_BASE = "t_user_base";
+	String t_plat_send_history = "t_plat_send_history";
+	String t_user_tags = "t_user_tags";
+	String t_plat_user_article_map = "t_plat_user_article_map";
+	String t_user_recommend = "t_user_recommend";
 	
 	String HDFS_URL_ANDROID_1D = "hdfs://master:9000/SDKData/android/data_android_" + DateUtils.getYesterdayDateyyMM() + "/pagedata_android" + DateUtils.getYesterdayDateyyMM() + ".txt";
 	String HDFS_URL_ANDROID_7D = "hdfs://master:9000/user/hadoop/days_pagedata/android/pagedata7day.txt";
