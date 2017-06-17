@@ -18,8 +18,6 @@ import com.orange.common.dbhelper.ConfigurationManager;
 import com.orange.common.dbhelper.PropertiesUtil;
 import com.orange.common.util.Constants;
 
-
-
 public class CountUserIndex {
 	
 	//统计广告的分时点击情况，并将结果写入report_ad_click_time表
@@ -72,7 +70,10 @@ public class CountUserIndex {
 				+ "and area <> 'null' "
 				+ "and province is not null "
 				+ "and city is not null "
-				+ "and area is not null "				
+				+ "and area is not null "
+				+ "and province not like '%-%' "
+				+ "and province not like '%.%' "
+				+ "and province not like '%�%' "
 				+ "group by province,city,area");
 		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "sys_user_area",PropertiesUtil.getProperties());
 	}
@@ -94,6 +95,9 @@ public class CountUserIndex {
 			+ "province <> '' "
 			+ "and city <> '' "
 			+ "and area <> '' "
+			+ "and province not like '%-%' "
+			+ "and province not like '%.%' "
+			+ "and province not like '%�%' "
 			+ "and province <> 'null' "
 			+ "and city <> 'null' "
 			+ "and area <> 'null' "
@@ -116,6 +120,7 @@ public class CountUserIndex {
 			+ "from_unixtime(unix_timestamp()) create_time "
 			+ "from logindata "
 			+ "where devicescreen <> '' "
+			+ "and devicescreen like '%*%' "
 			+ "group by devicescreen");
 		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "sys_screen",PropertiesUtil.getProperties());
 	}
@@ -131,12 +136,16 @@ public class CountUserIndex {
 				+ "from_unixtime(unix_timestamp()) create_time "
 				+ "from logindata "
 				+ "where devicetype <> '' "
+				+ "and devicetype not like '%省%' "
+				+ "and devicetype not like '%市%' "
+				+ "and devicetype not like '%区%' "
+				+ "and devicetype not like '%县%' "
 				+ "and devicetype is not null "	
 				+ "group by substring_index(devicetype,' ',1),substring_index(substring_index(devicetype,' ',4),' ',-2) ");
 		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "sys_devicetype",PropertiesUtil.getProperties());
 	}
 
-	//获取用户分时活跃，并写入表report_hau
+	//获取用户停留时长，并写入表report_hau
 	public void get_hau (SparkSession session){	
 		//将sql语句的查询结果存储在一个Dataset中，进而通过jdbc导出到mysql数据库中
 		Dataset<Row> sqlDF = session.sql("select "
@@ -170,32 +179,35 @@ public class CountUserIndex {
 		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "sys_modules_hau",PropertiesUtil.getProperties());
 	}
 
-	//获取7天活跃，并写入表report_daysau;获取周活跃，并写入表report_au
+	//获取三十天活跃，并写入表report_daysau
 	public void get_sevendau (SparkSession session){
 		//将sql语句的查询结果存储在一个Dataset中，进而通过jdbc导出到mysql数据库中
 		Dataset<Row> sqlDF = session.sql("select "
-				+ "province,"
-				+ "city,"
-				+ "area,"
-				+ "count(distinct userid) as active_user_number,"
-				+ "count(userid) as login_number,"
-				+ "concat(from_unixtime(unix_timestamp()-86400*7,'yyyy-MM-dd~'),"
-				+ "from_unixtime(unix_timestamp()-86400,'yyyy-MM-dd')) active_date,"
-				+ "\"SevenDAU\" as count_type,"
-				+ "from_unixtime(unix_timestamp()) create_time "
-				+ "from logindata "
-				+ "where province <> '' "
-				+ "and city <> '' "
-				+ "and area <> '' "
-				+ "and province <> 'null' "
-				+ "and city <> 'null' "
-				+ "and area <> 'null' "
-				+ "and province is not null "
-				+ "and city is not null "
-				+ "and area is not null "		
-				+ "and logintime > from_unixtime(unix_timestamp()-86400*30,'yyyy-MM-dd 00:00:00') "
-				+ "and logintime < from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
-				+ "group by province,city,area");
+			+ "province,"
+			+ "city,"
+			+ "area,"
+			+ "count(distinct userid) as active_user_number,"
+			+ "count(userid) as login_number,"
+			+ "concat(from_unixtime(unix_timestamp()-86400*7,'yyyy-MM-dd~'),"
+			+ "from_unixtime(unix_timestamp()-86400,'yyyy-MM-dd')) active_date,"
+			+ "\"SevenDAU\" as count_type,"
+			+ "from_unixtime(unix_timestamp()) create_time "
+			+ "from logindata "
+			+ "where province <> '' "
+			+ "and city <> '' "
+			+ "and area <> '' "
+			+ "and province not like '%-%' "
+			+ "and province not like '%.%' "
+			+ "and province not like '%�%' "
+			+ "and province <> 'null' "
+			+ "and city <> 'null' "
+			+ "and area <> 'null' "
+			+ "and province is not null "
+			+ "and city is not null "
+			+ "and area is not null "		
+			+ "and logintime>from_unixtime(unix_timestamp()-86400*7,'yyyy-MM-dd 00:00:00') "
+			+ "and logintime<from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
+			+ "group by province,city,area");
 		sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_daysau",PropertiesUtil.getProperties());
 	
 		//获取周活跃，并写入表report_au
@@ -203,7 +215,7 @@ public class CountUserIndex {
 		ca.setTime(new Date());
 		int week = ca.get(Calendar.DAY_OF_WEEK);
 		if(week == 2){
-			Dataset<Row> sqlDF2 = session.sql("select "
+			sqlDF = session.sql("select "
 				+ "province,"
 				+ "city,"
 				+ "area,"
@@ -226,7 +238,7 @@ public class CountUserIndex {
 				+ "and logintime>from_unixtime(unix_timestamp()-86400*7,'yyyy-MM-dd 00:00:00') "
 				+ "and logintime<from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
 				+ "group by province,city,area");
-			sqlDF2.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_au",PropertiesUtil.getProperties());
+			sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_au",PropertiesUtil.getProperties());
 		}
 	}
 
@@ -271,10 +283,9 @@ public class CountUserIndex {
 						+"group by userid) "
 						+"group by usefrequency");
 				sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_use_frequency",PropertiesUtil.getProperties());
-	}  
+	}
 	
-
-	//获取用户30天活跃，并写入表report_daysau;统计月活，并将结果写入report_au表
+	//获取用户30天活跃，并写入表report_daysau
 	public void get_thirtydau (SparkSession session){
 		//将sql语句的查询结果存储在一个Dataset中，进而通过jdbc导出到mysql数据库中
 		Dataset<Row> sqlDF = session.sql("select "
@@ -291,6 +302,9 @@ public class CountUserIndex {
 			+ "where province <> '' "
 			+ "and city <> '' "
 			+ "and area <> '' "
+			+ "and province not like '%-%' "
+			+ "and province not like '%.%' "
+			+ "and province not like '%�%' "
 			+ "and province <> 'null' "
 			+ "and city <> 'null' "
 			+ "and area <> 'null' "
@@ -314,7 +328,7 @@ public class CountUserIndex {
 			Date beforemonth = ca.getTime();
 			String beforedate = getdate.format(beforemonth);
 			String beforemonthdate = getmonth.format(beforemonth);		
-			Dataset<Row> sqlDF2 = session.sql("select "
+			sqlDF = session.sql("select "
 				+ "province,"
 				+ "city,"
 				+ "area,"
@@ -333,11 +347,11 @@ public class CountUserIndex {
 				+ "and province is not null "
 				+ "and city is not null "
 				+ "and area is not null "
-				+ "and logintime > '"
+				+ "logintime > '"
 				+ beforedate + " 00:00:00' "
 				+ "and logintime < from_unixtime(unix_timestamp(),'yyyy-MM-dd 00:00:00') "
 				+ "group by province,city,area");
-			sqlDF2.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_au",PropertiesUtil.getProperties());
+			sqlDF.write().mode("append").jdbc(ConfigurationManager.getProperty(Constants.JDBC_URL2), "report_au",PropertiesUtil.getProperties());
 		}
 	}
 	
