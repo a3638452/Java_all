@@ -10,6 +10,7 @@ public class ArticleUserSets implements Serializable{
 		private String recommend_type;
 		private String article_time;
 		 private String create_time;
+		 private String Opt_type;
 		 
 		public Long getP_id() {
 			return p_id;
@@ -46,6 +47,12 @@ public class ArticleUserSets implements Serializable{
 		}
 		public void setCreate_time(String create_time) {
 			this.create_time = create_time;
+		}
+		public String getOpt_type() {
+			return Opt_type;
+		}
+		public void setOpt_type(String opt_type) {
+			Opt_type = opt_type;
 		}
 		 
 		 

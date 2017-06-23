@@ -23,12 +23,12 @@ import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
-import scala.Tuple2;
-
 import com.orange.bean.UserLifeCycle;
 import com.orange.common.util.Constants;
 import com.orange.common.util.SparkSessionHDFS;
 import com.orange.dao.factory.DAOFactory;
+
+import scala.Tuple2;
 
 
 /**

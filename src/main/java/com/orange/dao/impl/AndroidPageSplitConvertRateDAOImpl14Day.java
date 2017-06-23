@@ -12,10 +12,9 @@ import com.orange.dao.AndroidPageSplitConvertRateDAO;
 public class AndroidPageSplitConvertRateDAOImpl14Day implements AndroidPageSplitConvertRateDAO {
 
 	public void insert(PageSplitConvertRate pageSplitConvertRate) {
-		String sql = "insert into page_convert_rate_android_14d values(?,?,?,?,?,?)";  
+		String sql = "insert into page_convert_rate_android_1d(page_split,start_convert_rate,last_convert_rate,pv,create_time) values(?,?,?,?,?)";  
 		Object[] params = new Object[]{
-				 pageSplitConvertRate.getId()
-				,pageSplitConvertRate.getPage_split()
+				 pageSplitConvertRate.getPage_split()
 				,pageSplitConvertRate.getStart_convert_rate()
 				,pageSplitConvertRate.getLast_convert_rate()
 				,pageSplitConvertRate.getPv()

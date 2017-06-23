@@ -8,13 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
-	
 
-
-
-
-
-	import org.apache.spark.api.java.JavaPairRDD;
+import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
@@ -27,27 +22,16 @@ import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
-	
 
-
-
-
-
-	import scala.Tuple2;
-	
-
-
-
-
-
-	import com.orange.bean.PageSplitConvertRate;
+import com.orange.bean.PageSplitConvertRate;
 import com.orange.common.util.Constants;
 import com.orange.common.util.DateUtils;
 import com.orange.common.util.NumberUtils;
 import com.orange.common.util.SparkSessionForHdfs;
 import com.orange.dao.IosPageSplitConvertRateDAO;
 import com.orange.dao.factory.DAOFactory;
-import com.orange.dao.impl.IosPageSplitConvertRateDAOImpl7Day;
+
+import scala.Tuple2;
 	
 	
 	
@@ -468,7 +452,7 @@ import com.orange.dao.impl.IosPageSplitConvertRateDAOImpl7Day;
 		
 		
 		//执行插入方法
-	 IosPageSplitConvertRateDAO iosPageSplitConvertRateDAO07Day = daoFactory.getIosPageSplitConvertRateDAO07Day();
+	 IosPageSplitConvertRateDAO iosPageSplitConvertRateDAO07Day = daoFactory.getIosPageSplitConvertRateDAO7Day();
 	 iosPageSplitConvertRateDAO07Day.insert(pageSplitConvertRate2); 
 		 }
 		}

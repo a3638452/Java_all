@@ -10,9 +10,10 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 
-import com.orange.sparkproject.dao.LogTopicsDAO;
-import com.orange.sparkproject.dao.factory.DAOFactory;
-import com.orange.sparkproject.domain.LogTopics;
+import com.orange.bean.LogTopics;
+import com.orange.dao.LogTopicsDAO;
+import com.orange.dao.factory.DAOFactory;
+
 
  class LogTopicsCollector implements Serializable{
 

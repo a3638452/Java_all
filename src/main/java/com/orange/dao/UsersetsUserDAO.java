@@ -1,6 +1,10 @@
 package com.orange.dao;
 
+import java.util.List;
+
 import com.orange.bean.UsersetsUser;
+
+
 
 
 /**
@@ -11,5 +15,10 @@ import com.orange.bean.UsersetsUser;
 public interface UsersetsUserDAO {
 
 	void insert(UsersetsUser usersetsUser);
-	
+
+	/**
+	 * 批量插入
+	 * @param 
+	 */
+	void insertBatch(List<UsersetsUser> usersetsUser);
 }

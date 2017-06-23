@@ -1,9 +1,8 @@
 package com.orange.service;
 
-import com.orange.dao.QueAnswer;
-import com.orange.dao.StatisticsUserInforLoginTime;
-import com.orange.dao.StatisticsUserModules;
-import com.orange.dao.UserBaseInfoTags;
+import org.apache.spark.sql.SparkSession;
+
+import com.orange.common.util.SparkSessionHDFS;
 
 
 /**
@@ -14,11 +13,12 @@ import com.orange.dao.UserBaseInfoTags;
 public class RunSparkApplications {
 
 	public static void main(String[] args) {
+		SparkSession sparkHDFS = new SparkSessionHDFS().getSparkSession();
+		
+		 new QueAnswer().getQqueAnswer(sparkHDFS);  //你问我答每天答题量统计 
+		 new StatisticsUserInforLoginTime().statisticsUserInforLoginTime(sparkHDFS);   //用户登陆时长
+		 new DayUserUseTime().dayUserUseTime(sparkHDFS);  //停留时长人数统计
 		 
-		 new QueAnswer().getQqueAnswer();  //你问我答每天答题量统计 
-		 new StatisticsUserInforLoginTime().statisticsUserInforLoginTime();   //用户登陆时长
-		 new StatisticsUserModules().statisticsUserModules();   //用户模块使用时长
-		 new UserBaseInfoTags().userBaseInfoTags(); //用户基本信息画像
+		 sparkHDFS.stop(); 
 	}
-	
 }

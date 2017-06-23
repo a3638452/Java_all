@@ -10,10 +10,11 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 
-import com.orange.sparkproject.dao.LogQuestionsDAO;
-import com.orange.sparkproject.dao.factory.DAOFactory;
-import com.orange.sparkproject.domain.LogQuestions;
+import com.orange.bean.LogQuestions;
+import com.orange.dao.LogQuestionsDAO;
+import com.orange.dao.factory.DAOFactory;
 
+	
  class LogQueCollector implements Serializable{
 
 	private static final long serialVersionUID = 1L;

@@ -14,12 +14,12 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
-import scala.Tuple2;
-
 import com.orange.bean.UserBaseTags;
 import com.orange.common.util.Constants;
 import com.orange.common.util.SparkSessionHDFS;
 import com.orange.dao.factory.DAOFactory;
+
+import scala.Tuple2;
 
 public class UserBaseInfoTags implements Serializable{
 	private static final long serialVersionUID = 1L;

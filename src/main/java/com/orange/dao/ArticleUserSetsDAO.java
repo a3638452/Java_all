@@ -1,6 +1,10 @@
 package com.orange.dao;
 
+import java.util.List;
+
 import com.orange.bean.ArticleUserSets;
+
+
 
 
 /**
@@ -11,5 +15,7 @@ import com.orange.bean.ArticleUserSets;
 public interface ArticleUserSetsDAO {
 
 	void insert(ArticleUserSets articleUserSets);
+	
+	void insertBatch(List<ArticleUserSets> articleUserSets);
 	
 }

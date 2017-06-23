@@ -1,5 +1,6 @@
 package com.orange.service;
 
+
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collection;
@@ -29,30 +30,30 @@ import org.apache.spark.streaming.kafka010.ConsumerStrategies;
 import org.apache.spark.streaming.kafka010.KafkaUtils;
 import org.apache.spark.streaming.kafka010.LocationStrategies;
 
-import scala.Tuple2;
-
 import com.orange.bean.ArticleUserSets;
 import com.orange.bean.UserTags;
 import com.orange.bean.UsersetsUser;
 import com.orange.common.util.Constants;
-import com.orange.common.util.DateUtils;
 import com.orange.dao.ArticleUserSetsDAO;
 import com.orange.dao.UserTagsDAO;
 import com.orange.dao.UsersetsUserDAO;
 import com.orange.dao.factory.DAOFactory;
 
+import scala.Tuple2;
+
 
 /**
- * 线上学堂实时推荐系统
+ * eѧʵʱ�����Ƽ�ϵͳ
  * @author Administrator
  *
  */
+@SuppressWarnings("all")
 public class ArticleRecommend {
 
     public static void main(String[] args) throws InterruptedException {
 
            SparkConf conf = new SparkConf()
-                  //.setMaster("local[2]")
+                  .setMaster("local[2]")
                  .setAppName("ArticleRecommend")
                  .set("spark.driver.memory", "2g")
                  .set("spark.executor.memory", "1g")
@@ -84,16 +85,12 @@ public class ArticleRecommend {
        //kafka流数据的入口
        inPutDStream.foreachRDD(new VoidFunction<JavaRDD<ConsumerRecord<String,String>>>() {
 
-		private static final long serialVersionUID = 1L;
-
-			@Override
+            @Override
             public void call(JavaRDD<ConsumerRecord<String, String>> lines)
                        throws Exception {
       //  一.画像___________________________________________________________以下是计算的入口__________________________________________________________________________________________________________________________________________
 
             	 List<String> inputList = lines.map(new Function<ConsumerRecord<String,String>, String>() {
-
-					private static final long serialVersionUID = 1L;
 
 						@Override
                      public String call(
@@ -130,7 +127,7 @@ public class ArticleRecommend {
                  while(m.find()){//如果匹配到标志，才执行处理
 
                 	 //查询数据库获取<user_id,s_tag>
-                       Dataset<Row> historyDF = spark.read().jdbc(Constants.URL_EXIAOXIN, Constants.t_plat_send_history, Constants.JdbcCon());
+                       Dataset<Row> historyDF = spark.read().jdbc(Constants.URL_EXIAOXIN, Constants.T_PLAT_SEND_HISTORY, Constants.JdbcCon());
                        historyDF.createOrReplaceTempView("t_plat_send_history");   // 文章和标签匹配表t_plat_send_history
 
                        //查出用户阅读文章的标签
@@ -149,14 +146,12 @@ public class ArticleRecommend {
                                userTags.setUser_id(user_ids);
                                userTags.setUser_tag(user_tag);
                                userTags.setS_level("1");
-                               userTags.setCreate_time(DateUtils.formatTimeMinute(new java.util.Date()));
-                               userTags.setUpdate_time(DateUtils.formatTimeMinute(new java.util.Date()));
                                if(user_ids!=null && !user_ids.equals("")){
                                     UserTagsDAO userTagimpl = DAOFactory.getUserTags();
                                      userTagimpl.insert(userTags);
                            }
                                //拿到用户基本信息表
-                               spark.read().jdbc(Constants.URL_EXIAOXIN, Constants.t_user_tags, Constants.JdbcCon())
+                               spark.read().jdbc(Constants.URL_EXIAOXIN, Constants.T_USER_TAGS, Constants.JdbcCon())
                                .createOrReplaceTempView("t_user_tags");
                                //查出用户画像表中是否有这个类型的文章
                                List<Row> timeSignList = spark.sql(" select count(*) from t_user_tags where user_id = '"+user_ids+"' and user_tag = '"+user_tag+"' ")
@@ -173,9 +168,7 @@ public class ArticleRecommend {
                                 Map<String, String> recommendList = spark.sql("select p_id,s_creater_time from t_tags_temp  where s_creater_time  > FROM_UNIXTIME(UNIX_TIMESTAMP()-1296000,'yyyy-MM-dd 00:00:00') ")
                                        .toJavaRDD().mapToPair(new PairFunction<Row, String, String>() {
 
-										private static final long serialVersionUID = 1L;
-
-										@Override
+                                        @Override
                                         public Tuple2<String, String> call(Row row)
                                                 throws Exception {
                                             String article_id = String.valueOf(row.getLong(0));
@@ -184,24 +177,18 @@ public class ArticleRecommend {
                                         }
                                     }).reduceByKeyLocally(new Function2<String, String, String>() {
 
-										private static final long serialVersionUID = 1L;
-
-										@Override
+                                        @Override
                                         public String call(String v1, String v2) throws Exception {
 
                                             return v1+v2;
                                         }
                                     });
                            //!!jdbc查询出用户已读文章，做成List
-                          spark.read().jdbc(Constants.URL_EXIAOXIN, Constants.t_plat_user_article_map, Constants.JdbcCon())
-                          .createOrReplaceTempView("t_plat_user_article_map");
+                          spark.read().jdbc(Constants.URL_EXIAOXIN, Constants.T_PLAT_USER_ARTICLE_MAP, Constants.JdbcCon()).createOrReplaceTempView("t_plat_user_article_map");
                          //!!jdbc查出的已读文章，做成map
-                          Map<String, String> mapHadReadMap = spark.sql("select s_article_id , 0 as num from t_plat_user_article_map where s_user_id  = '"+user_ids+"' "  )
-                        		  .javaRDD().mapToPair(new PairFunction<Row, String, String>() {
+                          Map<String, String> mapHadReadMap = spark.sql("select s_article_id , 0 as num from t_plat_user_article_map where s_user_id  = '"+user_ids+"' "  ).javaRDD().mapToPair(new PairFunction<Row, String, String>() {
 
-									private static final long serialVersionUID = 1L;
-
-							@Override
+                              @Override
                                 public Tuple2<String, String> call(Row row)
                                         throws Exception {
                                     String article_id = String.valueOf(row.getLong(0));
@@ -210,9 +197,7 @@ public class ArticleRecommend {
                                 }
                             }).reduceByKeyLocally(new Function2<String, String, String>() {
 
-								private static final long serialVersionUID = 1L;
-
-								@Override
+                                  @Override
                                    public String call(String v1, String v2) throws Exception {
 
                                        return v1+v2;
@@ -220,49 +205,39 @@ public class ArticleRecommend {
                                });
 
                           //!!hdfs查出来的昨天已推荐
-                        spark.read().parquet(Constants.PARQUET_PATH).createOrReplaceTempView("t_hdfs");
-                        Map<String, String> hdfsMap = spark.sql("select article_id,recommend_type from t_hdfs ")
-                                .javaRDD().mapToPair(new PairFunction<Row, String, String>() {
-                                	
-									private static final long serialVersionUID = 1L;
-
-										@Override
-                                    public Tuple2<String, String> call(Row row)
-                                            throws Exception {
-                                        String article_id = row.getString(0);
-                                        String article_time = row.getString(1);
-                                        return new Tuple2<String, String>(article_id, article_time);
-                                    }
-                                }).reduceByKeyLocally(new Function2<String, String, String>() {
-                                	
-									private static final long serialVersionUID = 1L;
-
-											@Override
-                                             public String call(String v1, String v2) throws Exception {
-                                                  return v1+v2;
-                                             }
-                                         });
+//                        spark.read().parquet(Constants.PARQUET_PATH).createOrReplaceTempView("t_hdfs");
+//                        Map<String, String> hdfsMap = spark.sql("select article_id,recommend_type from t_hdfs ")
+//                                .javaRDD().mapToPair(new PairFunction<Row, String, String>() {
+//                                	
+//                                         @Override
+//                                    public Tuple2<String, String> call(Row row)
+//                                            throws Exception {
+//                                        String article_id = row.getString(0);
+//                                        String article_time = row.getString(1);
+//                                        return new Tuple2<String, String>(article_id, article_time);
+//                                    }
+//                                }).reduceByKeyLocally(new Function2<String, String, String>() {
+//                                             @Override
+//                                             public String call(String v1, String v2) throws Exception {
+//                                                  return v1+v2;
+//                                             }
+//                                         });
 
                          //!!!!DB查出的已推荐
-                         spark.read().jdbc(Constants.URL_EXIAOXIN, Constants.t_user_recommend, Constants.JdbcCon())
-                         .createOrReplaceTempView("t_user_recommend");
-                         Map<String, String> dbRecommendMap = spark.sql("select article_id ,recommend_type from t_user_recommend where create_time > FROM_UNIXTIME(UNIX_TIMESTAMP()-86400,'yyyy-MM-dd 00:00:00')")
-                        		 .javaRDD().mapToPair(new PairFunction<Row, String, String>() {
+                         spark.read().jdbc(Constants.URL_EXIAOXIN, Constants.T_USER_RECOMMEND, Constants.JdbcCon()).createOrReplaceTempView("t_user_recommend");
+                         Map<String, String> dbRecommendMap = spark.sql("select article_id ,recommend_type from t_user_recommend where create_time > FROM_UNIXTIME(UNIX_TIMESTAMP()-86400,'yyyy-MM-dd 00:00:00')").javaRDD().mapToPair(new PairFunction<Row, String, String>() {
 
-									private static final long serialVersionUID = 1L;
-
-							@Override
+                            @Override
                              public Tuple2<String, String> call(Row row)
                                      throws Exception {
                                  String article_id = row.getString(0);
-                                 String article_time = row.getString(1);
+                                 String article_time = String.valueOf(row.getInt(1));
                                  return new Tuple2<String, String>(article_id, article_time);
                              }
                          }).reduceByKeyLocally(new Function2<String, String, String>() {
 
-							private static final long serialVersionUID = 1L;
 
-								@Override
+                                @Override
                                 public String call(String v1, String v2) throws Exception {
 
                                     return v1+v2;
@@ -270,7 +245,7 @@ public class ArticleRecommend {
                             });
 
                          HashMap<String, String> hadRecommendMap = new HashMap<String,String>();
-                         hadRecommendMap.putAll(hdfsMap);
+                        // hadRecommendMap.putAll(hdfsMap);
                          hadRecommendMap.putAll(dbRecommendMap);
                          
                           ArticleUserSets articleUserSets = new ArticleUserSets();   //推荐列表用户集合的bean
@@ -313,44 +288,36 @@ public class ArticleRecommend {
  //二.2_________________________________________________________________________________________________________________________________________________________________________________________________             
                     	   //查询出用户上一次的该文章类型阅读时间
                           Timestamp lastCreateTime = spark.sql("SELECT MAX(update_time) FROM t_user_tags WHERE "
-                                   + "update_time < (SELECT MAX(update_time) FROM t_user_tags) and user_id = '"+user_ids+"' and user_tag = '"+user_tag+"' ")
-                                   .toJavaRDD().collect().get(0).getTimestamp(0);
+                                   + "update_time < (SELECT MAX(update_time) FROM t_user_tags) and user_id = '"+user_ids+"' and user_tag = '"+user_tag+"' ").toJavaRDD().collect().get(0).getTimestamp(0);
                           //!!!!!!!!!查询出该时间段的所有文章资源,变成rdd
                           spark.sql("select p_id , s_creater_time  from t_plat_send_history "
                                    + "where s_tag LIKE '%"+user_tag+"%' ").createOrReplaceTempView("t_all_tag_tmpl");
 
                            Map<String, String> recommendList = spark.sql("select p_id article_id, s_creater_time  from t_all_tag_tmpl "                         
                                    + " where s_creater_time >  '" + lastCreateTime + "' ")
-                                       .toJavaRDD().mapToPair(new PairFunction<Row, String, String>() {
+                                                               .toJavaRDD().mapToPair(new PairFunction<Row, String, String>() {
 
-										private static final long serialVersionUID = 1L;
+                                                                @Override
+                                                                public Tuple2<String, String> call(
+                                                                        Row row)
+                                                                        throws Exception {
 
-										@Override
-                                        public Tuple2<String, String> call(
-                                                Row row)
-                                                throws Exception {
+                                                                    return new Tuple2<String, String>(String.valueOf(row.getLong(0)), String.valueOf(row.getTimestamp(1)));
+                                                                }
+                                                            }).reduceByKeyLocally(new Function2<String, String, String>() {
 
-                                            return new Tuple2<String, String>(String.valueOf(row.getLong(0)), String.valueOf(row.getTimestamp(1)));
-                                        }
-                                    }).reduceByKeyLocally(new Function2<String, String, String>() {
+                                                                @Override
+                                                                public String call(String v1, String v2) throws Exception {
+                                                                    return v1+v2;
+                                                                }
+                                                            });
 
-										private static final long serialVersionUID = 1L;
-
-										@Override
-                                        public String call(String v1, String v2) throws Exception {
-                                            return v1+v2;
-                                        }
-                                    });
-
-                           Dataset<Row> rddDSet = spark.read().jdbc(Constants.URL_EXIAOXIN, Constants.t_plat_user_article_map, Constants.JdbcCon());
+                           Dataset<Row> rddDSet = spark.read().jdbc(Constants.URL_EXIAOXIN, Constants.T_PLAT_USER_ARTICLE_MAP, Constants.JdbcCon());
                                rddDSet.createOrReplaceTempView("t_plat_user_article_map");  
                            //!!!!jdbc查出已读，做成Map
-                          Map<String, String> mapHadReadMap = spark.sql("select s_article_id , 0 as num from t_plat_user_article_map where s_user_id  = '"+user_ids+"' "  )
-                        		  .javaRDD().mapToPair(new PairFunction<Row, String, String>() {
+                          Map<String, String> mapHadReadMap = spark.sql("select s_article_id , 0 as num from t_plat_user_article_map where s_user_id  = '"+user_ids+"' "  ).javaRDD().mapToPair(new PairFunction<Row, String, String>() {
 
-									private static final long serialVersionUID = 1L;
-
-							@Override
+                              @Override
                                 public Tuple2<String, String> call(Row row)
                                         throws Exception {
                                     String article_id = String.valueOf(row.getLong(0));
@@ -359,9 +326,7 @@ public class ArticleRecommend {
                                 }
                             }).reduceByKeyLocally(new Function2<String, String, String>() {
 
-								private static final long serialVersionUID = 1L;
-
-								@Override
+                                  @Override
                                    public String call(String v1, String v2) throws Exception {
 
                                        return v1+v2;
@@ -369,25 +334,19 @@ public class ArticleRecommend {
                                });
 
                           //!!!!DB查出的已读，做成Map
-                          spark.read().jdbc(Constants.URL_EXIAOXIN, Constants.t_user_recommend, Constants.JdbcCon())
-                          .createOrReplaceTempView("t_user_recommend");
-                          Map<String, String> dbRecommendMap = spark.sql("select article_id ,recommend_type from t_user_recommend where create_time > FROM_UNIXTIME(UNIX_TIMESTAMP()-86400,'yyyy-MM-dd 00:00:00')")
-                        		  .javaRDD().mapToPair(new PairFunction<Row, String, String>() {
+                          spark.read().jdbc(Constants.URL_EXIAOXIN, Constants.T_USER_RECOMMEND, Constants.JdbcCon()).createOrReplaceTempView("t_user_recommend");
+                          Map<String, String> dbRecommendMap = spark.sql("select article_id ,recommend_type from t_user_recommend where create_time > FROM_UNIXTIME(UNIX_TIMESTAMP()-86400,'yyyy-MM-dd 00:00:00')").javaRDD().mapToPair(new PairFunction<Row, String, String>() {
 
-									private static final long serialVersionUID = 1L;
-
-							@Override
+                            @Override
                               public Tuple2<String, String> call(Row row)
                                       throws Exception {
                                   String article_id = row.getString(0);
-                                  String article_time = row.getString(1);
+                                  String article_time = String.valueOf(row.getInt(1));
                                   return new Tuple2<String, String>(article_id, article_time);
                               }
                           }).reduceByKeyLocally(new Function2<String, String, String>() {
 
-							private static final long serialVersionUID = 1L;
-
-								@Override
+                                @Override
                                  public String call(String v1, String v2) throws Exception {
 
                                      return v1+v2;

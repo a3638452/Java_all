@@ -9,13 +9,14 @@ public class UpdateUserLifeCycleImpl implements UpdateUserLifeCycleDAO{
 
 	public void update(UserLifeCycle userLifeCycle) {      //where usr_id = (?) and user_tag = (?)
 		//执行操作数据库的sql   ,use_time=use_time + 7
-		String sql = "UPDATE t_report_user_login_usetime SET s_login_count =s_login_count+ ?,s_use_time =s_use_time+?,s_report_date = ? WHERE f_user_id = ? "; 
+		String sql = "UPDATE t_report_user_login_usetime "
+				+ "SET s_login_count =s_login_count+ ?,s_use_time =s_use_time+?,s_report_date = ? WHERE f_user_id = ? "; 
 		//实例化数据结构数组
 		Object[] params = new Object[]{
 				userLifeCycle.getS_login_count(),
 				userLifeCycle.getS_use_time(),
 				userLifeCycle.getF_user_id(),
-				userLifeCycle.getS_register_time()
+				userLifeCycle.getS_report_date()
 		};
 		
 		JDBCHelper jdbcHelper = JDBCHelper.getInstance();

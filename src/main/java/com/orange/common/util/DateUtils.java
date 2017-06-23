@@ -114,6 +114,77 @@ public class DateUtils {
 	}
 	
 	/**
+	 * 获取2天前的日期（yyyy-MM-dd）
+	 * @return 昨天的日期
+	 */
+	public static String getPre2dayDate() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());  
+		cal.add(Calendar.DAY_OF_YEAR, -2);  
+		
+		Date date = cal.getTime();
+		
+		return DATE_FORMAT.format(date);
+	}
+	
+	/**
+	 * 获取4天前的日期（yyyy-MM-dd）
+	 * @return 昨天的日期
+	 */
+	public static String getPre4dayDate() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());  
+		cal.add(Calendar.DAY_OF_YEAR, -4);  
+		
+		Date date = cal.getTime();
+		
+		return DATE_FORMAT.format(date);
+	}
+	
+	/**
+	 * 获取8天前的日期（yyyy-MM-dd）
+	 * @return 昨天的日期
+	 */
+	public static String getPre8dayDate() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());  
+		cal.add(Calendar.DAY_OF_YEAR, -8);  
+		
+		Date date = cal.getTime();
+		
+		return DATE_FORMAT.format(date);
+	}
+	
+	/**
+	 * 获取15天前的日期（yyyy-MM-dd）
+	 * @return 昨天的日期
+	 */
+	public static String getPre15dayDate() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());  
+		cal.add(Calendar.DAY_OF_YEAR, -15);  
+		
+		Date date = cal.getTime();
+		
+		return DATE_FORMAT.format(date);
+	}
+	
+	/**
+	 * 获取31天前的日期（yyyy-MM-dd）
+	 * @return 昨天的日期
+	 */
+	public static String getPre31dayDate() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());  
+		cal.add(Calendar.DAY_OF_YEAR, -31);  
+		
+		Date date = cal.getTime();
+		
+		return DATE_FORMAT.format(date);
+	}
+	
+	
+	/**
 	 * 获取昨天的时间（yyyy-MM-dd HH:mm:ss）
 	 * @return 昨天的日期
 	 */

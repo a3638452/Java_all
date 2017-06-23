@@ -1,6 +1,10 @@
 package com.orange.dao;
 
+import java.util.List;
+
 import com.orange.bean.UserTags;
+
+
 
 
 /**
@@ -11,5 +15,11 @@ import com.orange.bean.UserTags;
 public interface UserTagsDAO {
 
 	void insert(UserTags userTags);
+	
+	/**
+	 * 批量插入
+	 * @param 
+	 */
+	void insertBatch(List<UserTags> userTags);
 	
 }

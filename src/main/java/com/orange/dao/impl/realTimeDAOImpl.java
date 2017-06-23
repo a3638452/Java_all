@@ -4,7 +4,6 @@ import com.orange.bean.LoginData;
 import com.orange.common.dbhelper.JDBCHelper;
 import com.orange.dao.realTimeDAO;
 
-
 public class realTimeDAOImpl implements realTimeDAO {
 
 	@Override

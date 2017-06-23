@@ -44,6 +44,7 @@ public interface Constants {
 	//String PARQUET_PATH = "hdfs://master:9000/recommend/2017-03-21_recommend.parquet";
 	String PARQUET_PATH = "hdfs://master:9000/recommend/"+DateUtils.getTodayDate()+"_recommend.parquet";
 	String URL_TEST = "jdbc:mysql://192.168.0.120:3306/exiaoxin?useUnicode=true&characterEncoding=UTF-8";
+	String URL_TEST_EXIAOXIN = "jdbc:mysql://192.168.0.120:3306/exiaoxin?useUnicode=true&characterEncoding=UTF-8";
 	
 	
 	String JDBC_LIVING_STREAMING = "live_streaming";
@@ -74,25 +75,16 @@ public interface Constants {
 	String JDBC_TABLE_NETWORK = "report_network_type";
 	String JDBC_TABLE_SYSOSVERSION = "report_os_version";//
 	String JDBC_TABLE_MODULE_COUNT = "report_modules";//
-
 	
-  /**
-   * 报表相关配置
-   */
-	
-	//报表指标需要用到的hdfs和jdbc连接及表明
-	//String JDBC_EXIAOXIN = "jdbc:mysql://122.193.22.133:3310/exiaoxin?useUnicode=true&characterEncoding=UTF-8";
-	String JDBC_EXIAOXIN = "jdbc:mysql://192.168.0.120:3306/exiaoxin?useUnicode=true&characterEncoding=UTF-8";
-	String JDBC_TEST_EXIAOXIN = "jdbc:mysql://192.168.0.18:3306/exiaoxin?useUnicode=true&characterEncoding=UTF-8";
-	String JDBC_DBLELE = "jdbc:mysql://122.193.22.133:3310/lele?useUnicode=true&characterEncoding=UTF-8";
-	//String HDFS_PAGEDATA_YESTERDAY = "hdfs://master:9000/SDKData/total/data"+DateUtils.getYesterdayDate()+"/pagedata"+DateUtils.getYesterdayDate()+".txt";
-	String HDFS_PAGEDATA_YESTERDAY = "hdfs://master:9000/SDKData/total/data"+DateUtils.getYesterdayDateyyMM()+"/pagedata"+DateUtils.getYesterdayDateyyMM()+".txt";
-	//String HDFS_PAGEDATA_YESTERDAY = "hdfs://master:9000/test/pagetest.txt";
-	//String HDFS_SYSTIMEDATA_YESTERDAY = "hdfs://master:9000/test/systimedata20170330xianshang.txt";
-	String HDFS_SYSTIMEDATA_YESTERDAY = "hdfs://master:9000/SDKData/total/data"+DateUtils.getYesterdayDateyyMM()+"/systimedata"+DateUtils.getYesterdayDateyyMM()+".txt";
-	//String HDFS_LOGINDATA_YESTERDAY = "hdfs://master:9000/test/logindata20170404xianshang.txt";
-	String HDFS_LOGINDATA_YESTERDAY = "hdfs://master:9000/test/logindata20170405.txt";
-	String HDFS_TEST = "hdfs://master:9000/test/logindataTestzhongcheng.txt";
+	String T_PLAT_SEND_HISTORY = "t_plat_send_history";
+    String T_PLAT_USER_ARTICLE_MAP = "t_plat_user_article_map";
+    String T_USER_TAGS = "t_user_tags";
+    String T_USER_RECOMMEND = "t_user_recommend";
+    String T_DISC_TOPIC = "t_disc_topic";
+    String T_DISC_GROUP = "t_disc_group";
+    String T_DISC_GROUP_USER_MAP = "t_disc_group_user_map";
+    String T_USER_TOPIC_TAGS = "t_user_topic_tags";
+    String T_USER_TOPIC_RECOMMEND = "t_user_topic_recommend";
 	String T_USRE_LIFE_CYCLE = "t_report_user_login_usetime";
 	String T_USER_ACTIVE_FREQUENCY = "t_report_user_active_frequency";
 	String T_USER_CONTINUE_ACTIVE = "t_user_continue_active";
@@ -113,7 +105,29 @@ public interface Constants {
 	String TEST_PAGE_USE_TIME = "test_page_use_time";
 	String T_USER_MODULE_WEEK = "t_user_module_week";
 	String T_USER_LOGIN_WEEK = "t_user_login_week";
+	String T_MIDDLE_USETIME = "t_middle_usetime";
 	
+  /**
+   * 报表相关配置
+   */
+	
+	//报表指标需要用到的hdfs和jdbc连接及表明
+	//String JDBC_EXIAOXIN = "jdbc:mysql://122.193.22.133:3310/exiaoxin?useUnicode=true&characterEncoding=UTF-8";
+	String JDBC_EXIAOXIN = "jdbc:mysql://192.168.0.120:3306/exiaoxin?useUnicode=true&characterEncoding=UTF-8";
+	String JDBC_TEST_EXIAOXIN = "jdbc:mysql://192.168.0.18:3306/exiaoxin?useUnicode=true&characterEncoding=UTF-8";
+	String JDBC_DBLELE = "jdbc:mysql://122.193.22.133:3310/lele?useUnicode=true&characterEncoding=UTF-8";
+	//String HDFS_PAGEDATA_YESTERDAY = "hdfs://master:9000/SDKData/total/data"+DateUtils.getYesterdayDate()+"/pagedata"+DateUtils.getYesterdayDate()+".txt";
+	String HDFS_PAGEDATA_YESTERDAY = "hdfs://master:9000/SDKData/total/data"+DateUtils.getYesterdayDateyyMM()+"/pagedata"+DateUtils.getYesterdayDateyyMM()+".txt";
+	//String HDFS_PAGEDATA_YESTERDAY = "hdfs://master:9000/test/pagetest.txt";
+	//String HDFS_SYSTIMEDATA_YESTERDAY = "hdfs://master:9000/test/systimedata20170330xianshang.txt";
+	String HDFS_SYSTIMEDATA_YESTERDAY = "hdfs://master:9000/SDKData/total/data"+DateUtils.getYesterdayDateyyMM()+"/systimedata"+DateUtils.getYesterdayDateyyMM()+".txt";
+	//String HDFS_LOGINDATA_YESTERDAY = "hdfs://master:9000/test/logindata20170404xianshang.txt";
+	String HDFS_LOGINDATA_YESTERDAY = "hdfs://master:9000/test/logindata20170405.txt";
+	String HDFS_TEST = "hdfs://master:9000/test/logindataTestzhongcheng.txt";
+	String T_USER_USE_TIME = "t_user_use_time";
+	String T_USER_QUE_NUM = "t_user_que_num";
+	String T_ANS_ACCEPT = "t_ans_accept";
+	String T_REPORT_USER_STAYTIME = "t_report_user_staytime_copy";
 	//本地的mysql配置
 	/**
 	 * Spark作业相关的常量
@@ -130,6 +144,12 @@ public interface Constants {
 	 }
   
   public static Properties testJdbcCon(){
+		 Properties prop =  new Properties();
+		 prop.put("user", "root");
+		 prop.put("password", "test3pass");
+		return prop;
+	 }
+  public static Properties JdbcConTest(){
 		 Properties prop =  new Properties();
 		 prop.put("user", "root");
 		 prop.put("password", "test3pass");
