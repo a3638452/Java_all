@@ -16,5 +16,17 @@ public class SessionOfSpark {
 			  .getOrCreate();
 		spark.sql(dataTarg);
 		return spark;
+		
+	}
+	
+	
+	public static SparkSession getSparkSQLSession(String appName){
+		SparkSession spark = SparkSession
+			  .builder()
+			  .appName(appName)
+			  .config(Constants.SPARK_SQL_DIR, Constants.WAREHOURSE_DIR)
+			  .enableHiveSupport()
+			  .getOrCreate();
+		return spark;
 	}
 }
